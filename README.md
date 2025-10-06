@@ -1,275 +1,249 @@
-# Video-call-app_
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Til tanlash</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="container">
-    <h2>Tilni tanlang</h2>
-    <select id="langSelect">
-      <option value="uz">O'zbek</option>
-      <option value="ru">Русский</option>
-      <option value="en">English</option>
-    </select>
-    <button onclick="saveLang()">Davom etish</button>
-  </div>
-  <script src="script.js"></script>
-</body>
-</html><!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8">
-  <title>Ro‘yxatdan o‘tish</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulyator</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h2>Ma’lumotlaringizni kiriting</h2>
-    <input type="text" id="name" placeholder="Ismingiz">
-    <input type="text" id="phone" placeholder="Telefon raqamingiz">
-    <button onclick="saveUser()">Saqlash</button>
+<div class="calc" id="calc">
+  <input type="text" id="display" readonly>
+  <div class="buttons">
+    <button onclick="add('7')">7</button>
+    <button onclick="add('8')">8</button>
+    <button onclick="add('9')">9</button>
+    <button onclick="add('/')">÷</button>
+    <button onclick="add('4')">4</button>
+    <button onclick="add('5')">5</button>
+    <button onclick="add('6')">6</button>
+    <button onclick="add('*')">×</button>
+    <button onclick="add('1')">1</button>
+    <button onclick="add('2')">2</button>
+    <button onclick="add('3')">3</button>
+    <button onclick="add('-')">−</button>
+    <button onclick="add('0')">0</button>
+    <button onclick="add('.')">.</button>
+    <button onclick="calculate()">=</button>
+    <button onclick="add('+')">+</button>
+    <button class="clear" onclick="clearDisplay()">Tozalash</button>
   </div>
-  <script src="script.js"></script>
+</div>
+
+<div id="recorder" class="hidden">
+  <h2>Diktofon</h2>
+  <div id="status">Tayyor 🎤</div>
+  <button id="recordBtn">Yozishni boshlash</button>
+  <button id="stopBtn" disabled>To‘xtatish</button>
+  <ul id="recordingsList"></ul>
+  <button class="clear" onclick="backToCalc()">🔙 Kalkulyatorga qaytish</button>
+</div>
+
+<script src="script.js"></script>
 </body>
-</html><!DOCTYPE html>
-<html lang="uz">
-<head>
-  <meta charset="UTF-8">
-  <title>Kontaktlar</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="container">
-    <h2>Kontaktlar</h2>
-    <ul id="contactList"></ul>
-    <input type="text" id="newContactName" placeholder="Kontakt nomi">
-    <input type="text" id="newContactPhone" placeholder="Telefon raqami">
-    <button onclick="addContact()">Kontakt qo‘shish</button>
-  </div>
-  <script src="script.js"></script>
-</body>
-</html><!DOCTYPE html>
-<html lang="uz">
-<head>
-  <meta charset="UTF-8">
-  <title>Chat</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="chat-header">
-    <h3 id="chatWith"></h3>
-    <button onclick="startCall()">📹 Video qo‘ng‘iroq</button>
-  </div>
-
-  <div id="chatWindow" class="chat-window"></div>
-
-  <div class="chat-input">
-    <input type="text" id="messageInput" placeholder="Xabar yozing...">
-    <button onclick="sendMessage()">Yubor</button>
-  </div>
-
-  <script src="script.js"></script>
-</body>
-</html><!DOCTYPE html>
-<html lang="uz">
-<head>
-  <meta charset="UTF-8">
-  <title>Video qo‘ng‘iroq</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="call-container">
-    <!-- Qarshi taraf video -->
-    <video id="remoteVideo" autoplay playsinline class="remote-video"></video>
-
-    <!-- O'zimningbody {
+</html>body {
+  background: #000;
+  color: #fff;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f2f2f2;
 }
 
-.container {
-  max-width: 400px;
-  margin: 50px auto;
+.calc {
+  background: #111;
   padding: 20px;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  text-align: center;
+  border-radius: 15px;
+  box-shadow: 0 0 20px #000;
+  width: 260px;
 }
 
-input, select, button {
-  width: 90%;
+input {
+  width: 100%;
+  height: 50px;
+  font-size: 22px;
+  margin-bottom: 10px;
+  text-align: right;
+  background: #222;
+  color: #0f0;
+  border: none;
+  border-radius: 8px;
   padding: 10px;
-  margin: 10px 0;
-  border-radius: 6px;
-  border: 1px solid #ccc;
 }
 
 button {
-  background: #007bff;
-  color: white;
+  width: 55px;
+  height: 55px;
+  font-size: 20px;
+  margin: 4px;
   border: none;
+  border-radius: 10px;
+  background: #333;
+  color: #fff;
   cursor: pointer;
 }
 
 button:hover {
-  background: #0056b3;
+  background: #444;
 }
 
-.chat-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  background: #007bff;
-  color: white;
-}
-
-.chat-window {
-  height: 300px;
-  overflow-y: auto;
-  background: #fafafa;
-  padding: 10px;
-  border: 1px solid #ccc;
-}
-
-.chat-input {
-  display: flex;
-  gap: 5px;
-  padding: 10px;
-}
-
-.chat-input input {
-  flex: 1;
-}
-
-.call-container {
-  position: relative;
+button.clear {
   width: 100%;
-  height: 100vh;
-  background: black;
-  overflow: hidden;
+  background: #900;
 }
 
-.remote-video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.hidden {
+  display: none;
 }
 
-.local-video {
-  position: absolute;
-  bottom: 80px;
-  right: 10px;
-  width: 120px;
-  height: 90px;
-  border: 2px solid white;
-  border// ===== Til tanlash =====
-function saveLang() {
-  const lang = document.getElementById("langSelect").value;
-  localStorage.setItem("lang", lang);
-  window.location.href = "register.html";
+#recorder {
+  text-align: center;
 }
 
-// ===== Ro‘yxatdan o‘tish =====
-function saveUser() {
-  const name = document.getElementById("name").value;
-  const phone = document.getElementById("phone").value;
-  if (name && phone) {
-    localStorage.setItem("name", name);
-    localStorage.setItem("phone", phone);
-    window.location.href = "chats.html";
-  } else {
-    alert("Iltimos, ism va telefon raqam kiriting!");
+#recordBtn, #stopBtn {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 18px;
+  border-radius: 10px;
+}
+
+#status {
+  margin: 10px;
+  font-size: 18px;
+}
+
+.recording-dot {
+  width: 10px;
+  height: 10px;
+  background: red;
+  border-radius: 50%;
+  display: inline-block;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0% {opacity: 1;}
+  50% {opacity: 0;}
+  100% {opacity: 1;}
+}let display = document.getElementById('display');
+let calc = document.getElementById('calc');
+let recorderDiv = document.getElementById('recorder');
+let recordingsList = document.getElementById('recordingsList');
+let sirliKod = localStorage.getItem('sirliKod');
+
+if (!sirliKod) {
+  sirliKod = prompt("Sirli kodni o'rnating:");
+  localStorage.setItem('sirliKod', sirliKod);
+}
+
+function add(value) {
+  display.value += value;
+}
+
+function clearDisplay() {
+  display.value = '';
+}
+
+function calculate() {
+  if (display.value === sirliKod) {
+    openRecorder();
+    return;
+  }
+  try {
+    display.value = eval(display.value);
+  } catch {
+    display.value = "Xato!";
   }
 }
 
-// ===== Kontaktlar =====
-function loadContacts() {
-  const contactList = document.getElementById("contactList");
-  if (!contactList) return;
+function openRecorder() {
+  calc.classList.add('hidden');
+  recorderDiv.classList.remove('hidden');
+}
 
-  const contacts = JSON.parse(localStorage.getItem("contacts")) || [];
-  contactList.innerHTML = "";
-  contacts.forEach((c, i) => {
-    const li = document.createElement("li");
-    li.textContent = `${c.name} (${c.phone})`;
-    li.onclick = () => {
-      localStorage.setItem("chatWith", JSON.stringify(c));
-      window.location.href = "chat.html";
+function backToCalc() {
+  recorderDiv.classList.add('hidden');
+  calc.classList.remove('hidden');
+}
+
+let mediaRecorder;
+let audioChunks = [];
+
+const recordBtn = document.getElementById('recordBtn');
+const stopBtn = document.getElementById('stopBtn');
+const statusDiv = document.getElementById('status');
+
+recordBtn.onclick = async () => {
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  mediaRecorder = new MediaRecorder(stream);
+  audioChunks = [];
+  mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+  mediaRecorder.onstop = saveRecording;
+  mediaRecorder.start();
+  statusDiv.innerHTML = 'Yozilmoqda <span class="recording-dot"></span>';
+  recordBtn.disabled = true;
+  stopBtn.disabled = false;
+};
+
+stopBtn.onclick = () => {
+  mediaRecorder.stop();
+  recordBtn.disabled = false;
+  stopBtn.disabled = true;
+  statusDiv.textContent = 'Tayyor 🎤';
+};
+
+function saveRecording() {
+  const blob = new Blob(audioChunks, { type: 'audio/webm' });
+  const url = URL.createObjectURL(blob);
+  const dateName = new Date().toISOString().replace(/[:.]/g, '-');
+  const li = document.createElement('li');
+  const audio = document.createElement('audio');
+  const delBtn = document.createElement('button');
+
+  audio.controls = true;
+  audio.src = url;
+  delBtn.textContent = '🗑️';
+  delBtn.onclick = () => {
+    recordingsList.removeChild(li);
+    saveAll();
+  };
+
+  li.textContent = `${dateName}: `;
+  li.appendChild(audio);
+  li.appendChild(delBtn);
+  recordingsList.appendChild(li);
+
+  saveAll();
+}
+
+function saveAll() {
+  const data = [];
+  recordingsList.querySelectorAll('audio').forEach(a => {
+    data.push(a.src);
+  });
+  localStorage.setItem('audioList', JSON.stringify(data));
+}
+
+function loadAll() {
+  const data = JSON.parse(localStorage.getItem('audioList') || '[]');
+  data.forEach(url => {
+    const li = document.createElement('li');
+    const audio = document.createElement('audio');
+    const delBtn = document.createElement('button');
+    audio.controls = true;
+    audio.src = url;
+    delBtn.textContent = '🗑️';
+    delBtn.onclick = () => {
+      recordingsList.removeChild(li);
+      saveAll();
     };
-    contactList.appendChild(li);
+    li.appendChild(audio);
+    li.appendChild(delBtn);
+    recordingsList.appendChild(li);
   });
 }
 
-function addContact() {
-  const name = document.getElementById("newContactName").value;
-  const phone = document.getElementById("newContactPhone").value;
-  if (name && phone) {
-    const contacts = JSON.parse(localStorage.getItem("contacts")) || [];
-    contacts.push({ name, phone });
-    localStorage.setItem("contacts", JSON.stringify(contacts));
-    loadContacts();
-  }
-}
-
-window.onload = loadContacts;
-
-// ===== Chat =====
-function loadChat() {
-  const chatWith = JSON.parse(localStorage.getItem("chatWith"));
-  if (!chatWith) return;
-  document.getElementById("chatWith").textContent = chatWith.name;
-}
-
-function sendMessage() {
-  const input = document.getElementById("messageInput");
-  const text = input.value.trim();
-  if (text === "") return;
-
-  const chatWindow = document.getElementById("chatWindow");
-  const div = document.createElement("div");
-  div.textContent = "Siz: " + text;
-  chatWindow.appendChild(div);
-
-  input.value = "";
-  chatWindow.scrollTop = chatWindow.scrollHeight;
-}
-
-function startCall() {
-  window.location.href = "call.html";
-}
-
-window.onload = function () {
-  loadContacts();
-  loadChat();
-};
-
-// ===== Video qo‘ng‘iroq =====
-let localStream;
-let currentCamera = "user"; // old kamera
-
-async function initCall() {
-  try {
-    localStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: currentCamera },
-      audio: true
-    });
-
-    const localVideo = document.getElementById("localVideo");
-    if (localVideo) localVideo.srcObject = localStream;
-  } catch (err) {
-    alert("Kamera yoki mikrofonga ruxsat berilmadi: " + err);
-  }
-}
-
-function switchCamera() {
-  currentCamera = currentCamera === "user" ? "environment" : "user";
-  initCall();
-}
-
-function toggleMic
+loadAll();
